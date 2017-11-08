@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "jsx": "react-native",
+   // "noEmit": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "pretty": true,
+    "lib": ["dom", "es2015", "es2016"]
+  },
+  "exclude": ["node_modules"]
+}

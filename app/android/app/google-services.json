@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "154395428708",
+    "firebase_url": "https://halling-event.firebaseio.com",
+    "project_id": "halling-event",
+    "storage_bucket": "halling-event.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154395428708:android:765279dce1dea828",
+        "android_client_info": {
+          "package_name": "no.hallingdata.hallingEvent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154395428708-gtvfl48osggu0m9j3h68ufm8i7ult1tt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYNjLPDIYsYgiPoZnf__UHko0mou4liQQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
