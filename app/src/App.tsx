@@ -1,8 +1,8 @@
-import * as React from "react";
-import { Text, View } from "react-native";
+import * as React from "react"
+import {Text, Container} from "native-base"
 
 export const App = props => (
-  <View>
-    <Text>Asgeir var her ikke? Eller? How live is it?</Text>
-  </View>
-);
+  <Container>
+    <Text>Asgeir var her ikke?</Text>
+  </Container>
+)
