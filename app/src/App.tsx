@@ -1,8 +1,19 @@
-import * as React from "react"
-import {Text, Container} from "native-base"
+import React, { SFC } from "react"
+import { DrawerNavigator } from "react-navigation"
 
-export const App = props => (
-  <Container>
-    <Text>Asgeir var her ikke?</Text>
-  </Container>
+import { Provider } from "react-redux"
+import configureStore from "./configureStore"
+
+import HomeScreen from "./containers/HomeScreen"
+
+const Content: any = DrawerNavigator({
+  Home: { screen: HomeScreen },
+})
+
+const store = configureStore()
+
+export const App: SFC<any> = props => (
+  <Provider store={store}>
+    <Content />
+  </Provider>
 )
