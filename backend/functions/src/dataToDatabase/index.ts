@@ -28,10 +28,7 @@ const inject: Inject = {
   writeToDatabase: (data: Array<any>) =>
     R.reduce(
       (batch, data) =>
-        batch.set(db.collection("events").doc(data.id), {
-          ...data,
-          modifiedTimestamp: new Date(data.modified).getTime(),
-        }),
+        batch.set(db.collection("events").doc(data.id), data),
       db.batch(),
       data
     ).commit(),
