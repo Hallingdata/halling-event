@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
 import { fetchEvents } from "../actions"
-import { EventList } from "../components/EventList"
+import EventList from "../components/EventList"
 
 type Props = {
   navigation: NavigationScreenProp<any, any>

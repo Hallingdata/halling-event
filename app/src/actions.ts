@@ -15,13 +15,19 @@ export const receiveEvents = events => {
 
 export const isFetching = () => {
   return {
-    type: IS_FETCHING
+    type: IS_FETCHING,
   }
 }
 
 export const fetchEvents = () => dispatch => {
   return eventsRef
-    .orderBy("modifiedTimestamp")
+    .orderBy("firstStartTimestamp")
     .get()
-    .then(res => dispatch(receiveEvents(R.map((doc: any) => doc._data, res._docs))))
+    .then(res => dispatch(receiveEvents(filterFinishedEvents(res._docs))))
 }
+
+const filterFinishedEvents = R.reduce((acc, { _data }) => {
+  if (_data.lastEndTimestamp > new Date().getTime()) {
+    return R.append(_data, acc)
+  }
+}, [])
