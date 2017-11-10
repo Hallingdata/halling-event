@@ -1,3 +1,4 @@
+import PushController from './containers/PushController';
 import { Text } from "native-base"
 import React, { SFC } from "react"
 import { DrawerNavigator } from "react-navigation"
@@ -24,6 +25,7 @@ export const App: SFC<any> = props => (
       onBeforeLift={onBeforeLift}
       persistor={persistor}
     >
+      <PushController/>
       <Content />
     </PersistGate>
   </Provider>
