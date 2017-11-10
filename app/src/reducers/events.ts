@@ -1,6 +1,4 @@
-import { combineReducers } from "redux"
-import { RECEIVE_EVENTS, IS_FETCHING } from "./actions"
-import * as R from "ramda"
+import { IS_FETCHING, RECEIVE_EVENTS } from "../actions"
 
 type State = {
   isFetching: boolean
@@ -12,7 +10,7 @@ const initState: State = {
   items: [],
 }
 
-function events(state = initState, action): State {
+export function events(state = initState, action): State {
   switch (action.type) {
     case RECEIVE_EVENTS:
       return {
@@ -30,8 +28,4 @@ function events(state = initState, action): State {
   }
 }
 
-const rootReducer = combineReducers({
-  events,
-})
-
-export default rootReducer
+export default events

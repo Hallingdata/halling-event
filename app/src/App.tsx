@@ -1,19 +1,30 @@
+import { Text } from "native-base"
 import React, { SFC } from "react"
 import { DrawerNavigator } from "react-navigation"
-
 import { Provider } from "react-redux"
-import configureStore from "./configureStore"
+import { PersistGate } from "redux-persist/es/integration/react"
 
+import configureStore from "./configureStore"
 import HomeScreen from "./containers/HomeScreen"
+
+const { persistor, store } = configureStore()
+
+const onBeforeLift = () => {
+  // take some action before the gate lifts
+}
 
 const Content: any = DrawerNavigator({
   Home: { screen: HomeScreen },
 })
 
-const store = configureStore()
-
 export const App: SFC<any> = props => (
   <Provider store={store}>
-    <Content />
+    <PersistGate
+      loading={<Text>Loading...</Text>}
+      onBeforeLift={onBeforeLift}
+      persistor={persistor}
+    >
+      <Content />
+    </PersistGate>
   </Provider>
 )
