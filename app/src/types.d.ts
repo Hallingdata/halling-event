@@ -1,6 +1,8 @@
 type HallingEvent = {
   id: string
   modifiedTimestamp: number
+  firstStartTimestamp: number
+  lastEndTimestamp: number
   lang: string
   location: boolean
   name: string

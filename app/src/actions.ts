@@ -20,6 +20,7 @@ export const isFetching = () => {
 }
 
 export const fetchEvents = () => dispatch => {
+  dispatch(isFetching())
   return eventsRef
     .orderBy("firstStartTimestamp")
     .get()

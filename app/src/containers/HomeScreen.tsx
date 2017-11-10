@@ -11,6 +11,7 @@ type Props = {
   navigation: NavigationScreenProp<any, any>
   dispatch: Dispatch<any>
   events: Array<HallingEvent>
+  isFetching: boolean
 }
 type State = {}
 
@@ -25,10 +26,10 @@ class HomeScreen extends Component<Props, State> {
   }
 
   render() {
-    const { events } = this.props
+    const { events, dispatch, isFetching } = this.props
     return (
       <Container>
-        <EventList events={events} />
+        <EventList events={events} refresh={() => dispatch(fetchEvents())} isRefreshing={isFetching} />
       </Container>
     )
   }
@@ -37,6 +38,7 @@ class HomeScreen extends Component<Props, State> {
 const mapStateToProps = state => {
   return {
     events: state.events.items,
+    isFetching: state.events.isFetching
   }
 }
 
