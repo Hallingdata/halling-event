@@ -1,4 +1,4 @@
-type HallingEvent = {
+export type HallingEvent = {
   id: string
   modifiedTimestamp: number
   firstStartTimestamp: number

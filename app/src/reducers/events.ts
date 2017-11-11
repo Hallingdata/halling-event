@@ -1,5 +1,7 @@
 import { IS_FETCHING, RECEIVE_EVENTS } from "../actions"
 
+import { HallingEvent } from "../../../types"
+
 type State = {
   isFetching: boolean
   items: Array<HallingEvent>

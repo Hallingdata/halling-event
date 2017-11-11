@@ -1,11 +1,9 @@
 import * as fireAdmin from "firebase-admin"
-import * as fireFunc from "firebase-functions"
 import fetch from "node-fetch"
 import * as R from "ramda"
 
 import { dataToDatabase, Inject } from "./dataToDatabase"
 
-fireAdmin.initializeApp(fireFunc.config().firebase)
 const db = fireAdmin.firestore()
 const getLastModificationTimeFromDb = db
   .collection("events")
