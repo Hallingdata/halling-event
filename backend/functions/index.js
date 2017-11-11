@@ -14,6 +14,10 @@ fireAdmin.initializeApp({
 const dataToDatabase = require("./dist/dataToDatabase").default
 const notify = require("./dist/notify/index").default
 
+exports.pullData = functions.https.onRequest((req, res) => {
+  dataToDatabase().then(exRes => res.send(exRes))
+})
+
 exports.notify = functions.https.onRequest((req, res) => {
   notify().then(exRes => res.send(exRes))
 })
