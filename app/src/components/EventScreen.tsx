@@ -1,10 +1,9 @@
-import { Container, Text } from "native-base"
+import { Container, H2, Text } from "native-base"
 import React, { SFC } from "react"
+import { View, Image } from "react-native"
+import * as R from "ramda"
 
 import { HallingEvent } from "../../../types"
-import { fetchEvents } from "../actions"
-import EventList from "./EventList"
-import { NavigationScreenProp } from "react-navigation"
 
 type Props = {
   event: HallingEvent
@@ -12,8 +11,29 @@ type Props = {
 
 const EventScreen: SFC<Props> = ({ event }) => (
   <Container>
-    <Text>{event.name}</Text>
+    <Image
+      resizeMode="cover"
+      style={{
+        height: 290,
+        width: null,
+      }}
+      source={{ uri: getLargeImages(event)[0] }}
+    />
+    <H2>{event.name}</H2>
+    <Text>{event.address.municipality.name}</Text>
   </Container>
 )
 
 export default EventScreen
+
+const getLargeImages = (event: HallingEvent): Array<string> => {
+  const getUrlsFromEventMediaList = mediaList =>
+    R.map((key: string) => getUrlFromMedia(event.media.list[key]))(
+      R.keys(mediaList)
+    )
+  const getUrlFromMedia: (any) => string = media => media.large.url
+
+  return R.has("list")(event.media)
+    ? getUrlsFromEventMediaList(event.media.list)
+    : [getUrlFromMedia(event.media)]
+}

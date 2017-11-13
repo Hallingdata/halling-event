@@ -17,6 +17,6 @@ export type HallingEvent = {
   }
   schedule: any
   media: {
-    list: any
+    list?: any
   }
 }
