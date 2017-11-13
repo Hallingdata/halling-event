@@ -6,14 +6,16 @@ import { RefreshControl } from "react-native"
 import { HallingEvent } from "../../../types"
 import { __ } from "ramda"
 import { StyleSheet } from "react-native"
+import { NavigationScreenProp } from "react-navigation"
 
 type Props = {
   events: Array<HallingEvent>
   refresh: () => void
   isRefreshing: boolean
+  navigateToEvent: (event: HallingEvent) => void
 }
 
-const EventList: SFC<Props> = ({ events, refresh, isRefreshing }) => {
+const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent }) => {
   const eventIsToDay = eventIsOnDate(new Date())
   const eventIsToMorrow = eventIsOnDate(addDaysToDate(new Date(), 1))
 
@@ -37,7 +39,7 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing }) => {
                 <Text>I DAG</Text>
               </ListItem>
               {eventIsToDay(event) ? (
-                (markEventAsIncluded(), <EventListRow event={event} />)
+                (markEventAsIncluded(), <EventListRow event={event} navigateToEvent={navigateToEvent} />)
               ) : (
                 <ListItem>
                   <Text note>Det er ingen planlagte arrangement i dag</Text>
@@ -55,7 +57,7 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing }) => {
                 <Text>I MORGEN</Text>
               </ListItem>
               {eventIsToMorrow(event) ? (
-                (markEventAsIncluded(), <EventListRow event={event} />)
+                (markEventAsIncluded(), <EventListRow event={event} navigateToEvent={navigateToEvent} />)
               ) : (
                 <ListItem>
                   <Text>Det er ingen planlagte arrangement i morgen</Text>
@@ -78,14 +80,14 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing }) => {
               <ListItem itemHeader style={styles.listHeader}>
                 <Text>SENERE</Text>
               </ListItem>
-              <EventListRow event={event} />
+              <EventListRow event={event} navigateToEvent={navigateToEvent} />
             </View>
           )
         }
 
         if (!eventIncluded) {
           items.push(
-            <EventListRow key={`${event.id}-bearEvent`} event={event} />
+            <EventListRow key={`${event.id}-bearEvent`} event={event} navigateToEvent={navigateToEvent}/>
           )
         }
 

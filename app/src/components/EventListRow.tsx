@@ -1,14 +1,16 @@
 import React, { SFC } from "react"
 import { Text, List, ListItem, Thumbnail, Body, Left, Right } from "native-base"
 import * as R from "ramda"
-import { HallingEvent } from '../../../types';
+import { HallingEvent } from "../../../types"
+import { NavigationScreenProp } from "react-navigation"
 
 type Props = {
   event: HallingEvent
+  navigateToEvent: (event: HallingEvent) => void
 }
 
-const EventListRow: SFC<Props> = ({ event }) => (
-  <ListItem>
+const EventListRow: SFC<Props> = ({ event, navigateToEvent }) => (
+  <ListItem onPress={() => navigateToEvent(event)}>
     <Thumbnail
       square
       size={80}

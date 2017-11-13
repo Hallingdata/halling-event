@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 
 import { fetchEvents } from "../actions"
 import HomeScreen from "../components/HomeScreen"
+import { HallingEvent } from '../../../types';
 
 const mapStateToProps = state => ({
   events: state.events.items,
@@ -15,4 +16,12 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+const mergeProps = (stateProps, dispatchProps, ownProps) => ({
+  ...stateProps,
+  ...dispatchProps,
+  navigateToEvent: (event: HallingEvent) => ownProps.navigation.navigate('Event', {event})
+})
+
+export default connect(mapStateToProps, mapDispatchToProps,mergeProps)(HomeScreen)
+
+
