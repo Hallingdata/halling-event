@@ -1,6 +1,7 @@
 import React, { SFC } from "react"
 import { Text, List, ListItem, Thumbnail, Body, Left, Right } from "native-base"
 import * as R from "ramda"
+import { HallingEvent } from '../../../types';
 
 type Props = {
   event: HallingEvent

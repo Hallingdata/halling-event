@@ -6,7 +6,7 @@ import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/es/integration/react"
 
 import configureStore from "./configureStore"
-import HomeScreen from "./containers/HomeScreen"
+import HomeContainer from "./containers/HomeContainer"
 
 const { persistor, store } = configureStore()
 
@@ -15,7 +15,7 @@ const onBeforeLift = () => {
 }
 
 const Content: any = DrawerNavigator({
-  Home: { screen: HomeScreen },
+  Home: { screen: HomeContainer },
 })
 
 export const App: SFC<any> = props => (
