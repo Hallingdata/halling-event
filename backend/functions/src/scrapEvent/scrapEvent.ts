@@ -28,7 +28,6 @@ export const scrapEvents = ({ fetchHtml }: Inject) => (
                       .find("div")
                       .html()
                   )
-                  .replace(/\n\s*\n/g, "\n") //  replace multi line breaks with single
 
                 // ignore kart info but return the rest
                 return header != "Kart" ? { ...acc, [header]: body } : acc
