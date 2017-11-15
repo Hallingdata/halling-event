@@ -1,5 +1,5 @@
 import {
-  getScheduleDatesAfterDateString,
+  getScheduleDatesAfterDateAsString,
   getFirstThumbnailUrl,
 } from "../util/hallingEvent"
 import React, { SFC } from "react"
@@ -28,7 +28,7 @@ const EventListRow: SFC<Props> = ({ event, navigateToEvent }) => (
             {date}
           </Text>
         ),
-        getScheduleDatesAfterDateString(new Date(), event)
+        getScheduleDatesAfterDateAsString(new Date(), event)
       )}
     </Body>
     <Right>

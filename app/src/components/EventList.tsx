@@ -8,10 +8,12 @@ import { __ } from "ramda"
 import { StyleSheet } from "react-native"
 import { NavigationScreenProp } from "react-navigation"
 import {
-  eventIsOnDate,
-  getScheduledInstancesAfterDate,
+  createEventCooperator,
+  eventIsScheduledOnDate,
+  getScheduledInstancesForEventOnAndAfterDate,
+  eventIsOnOrAfterDate,
 } from "../util/hallingEvent"
-import { addDaysToDate } from "../util/date"
+import { addDaysToDate, getStartAndEndOfDate } from "../util/date"
 
 type Props = {
   events: Array<HallingEvent>
@@ -26,38 +28,31 @@ const EventList: SFC<Props> = ({
   isRefreshing,
   navigateToEvent,
 }) => {
-  const eventIsToDay = eventIsOnDate(new Date())
-  const eventIsToMorrow = eventIsOnDate(addDaysToDate(new Date(), 1))
+  const currentDate = new Date()
+  const eventIsToDay = eventIsScheduledOnDate(currentDate)
+  const eventIsToMorrow = eventIsScheduledOnDate(addDaysToDate(currentDate, 1))
+  const eventIsOnOrAfterToDay = eventIsOnOrAfterDate(currentDate)
 
   let hasToDayHeader = false
   let hasToMorrowHeader = false
   let hasLaterHeader = false
 
-  events.forEach(({id}) => console.log("id: " + id))
-
-  const compareEvents = (a: HallingEvent, b: HallingEvent) => {
-    const dateNow = new Date()
-    const aNextEvent = getScheduledInstancesAfterDate(dateNow, a)
-    const bNextEvent = getScheduledInstancesAfterDate(dateNow, b)
-
-    if (aNextEvent.length === 0) return -1
-    if (bNextEvent.length === 0) return 1
-    if (aNextEvent[0].from > bNextEvent[0].from) return 1
-    if (aNextEvent[0].from < bNextEvent[0].from) return -1
-    return 0
-  }
-
   return (
     <List
-      dataArray={R.sort(compareEvents, events)}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
+      }
+      dataArray={R.sort(
+        createEventCooperator(currentDate),
+        R.filter(eventIsOnOrAfterToDay, events)
+      )}
       renderRow={(event: HallingEvent) => {
-        const items = []
+        const rowItems = []
         let eventIncluded = false
-        const markEventAsIncluded = () => eventIncluded = true
-        console.log(event.id)
+        const markEventAsIncluded = () => (eventIncluded = true)
         if (!hasToDayHeader) {
           hasToDayHeader = true
-          items.push(
+          rowItems.push(
             <View key={`${event.id}-toDayHeader`}>
               <ListItem itemHeader style={styles.listHeader}>
                 <Text>I DAG</Text>
@@ -81,7 +76,7 @@ const EventList: SFC<Props> = ({
 
         if (!eventIsToDay(event) && !hasToMorrowHeader) {
           hasToMorrowHeader = true
-          items.push(
+          rowItems.push(
             <View key={`${event.id}-toMorrowHeader`}>
               <ListItem itemHeader style={styles.listHeader}>
                 <Text>I MORGEN</Text>
@@ -111,7 +106,7 @@ const EventList: SFC<Props> = ({
         ) {
           hasLaterHeader = true
           markEventAsIncluded()
-          items.push(
+          rowItems.push(
             <View key={`${event.id}-laterHeader`}>
               <ListItem itemHeader style={styles.listHeader}>
                 <Text>SENERE</Text>
@@ -122,7 +117,7 @@ const EventList: SFC<Props> = ({
         }
 
         if (!eventIncluded) {
-          items.push(
+          rowItems.push(
             <EventListRow
               key={`${event.id}-bearEvent`}
               event={event}
@@ -131,11 +126,8 @@ const EventList: SFC<Props> = ({
           )
         }
 
-        return <View key={event.id}>{items.map(item => item)}</View>
+        return <View key={event.id}>{rowItems.map(item => item)}</View>
       }}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
-      }
     />
   )
 }

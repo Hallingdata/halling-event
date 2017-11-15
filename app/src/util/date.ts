@@ -4,7 +4,7 @@ export const addDaysToDate = (dateIn: Date, days: number): Date => {
   return date
 }
 
-export function getStartAndEndOfDay(date: Date) {
+export function getStartAndEndOfDate(date: Date) {
   date.setHours(0, 0, 0)
   const startOfDay = date.getTime()
   date.setHours(23, 59, 59, 59)
@@ -16,8 +16,7 @@ export function getStartAndEndOfDay(date: Date) {
 }
 
 export const isOnSameDate = (date1: Date) => (date2: Date) => {
-    console.log(date1 + " - " + date2)
-    const startAndEnd = getStartAndEndOfDay(date1)
+    const {startOfDay, endOfDay} = getStartAndEndOfDate(date1)
     const timestamp2 = date2.getTime()
-    return timestamp2 < startAndEnd.endOfDay && timestamp2 > startAndEnd.startOfDay
+    return timestamp2 < endOfDay && timestamp2 > startOfDay
 }

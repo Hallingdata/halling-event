@@ -1,6 +1,10 @@
-import { getStartAndEndOfDay, isOnSameDate } from "./date"
+import { getStartAndEndOfDate, isOnSameDate } from "./date"
 import { HallingEvent } from "../../../types"
 import * as R from "ramda"
+
+/**
+ * Date means start of date - 03.07.1988 is 03.07.1988T00:00:00
+ */
 
 export const getFirstThumbnailUrl: (any) => string = media => {
   const image = R.has("list")(media) ? media.list[1] : media
@@ -11,12 +15,12 @@ export const getFirstThumbnailUrl: (any) => string = media => {
   ) as string
 }
 
-export const getScheduleDatesAfterDateString = (
+export const getScheduleDatesAfterDateAsString = (
   date: Date,
   { schedule }: HallingEvent
 ): Array<string> => {
   const isList = R.has("list")(schedule)
-  const startOfDay = getStartAndEndOfDay(date).startOfDay
+  const startOfDay = getStartAndEndOfDate(date).startOfDay
 
   if (isList) {
     return R.map(listKey => {
@@ -46,17 +50,17 @@ export const getLargeImageUrls = (
     : [getUrlFromMedia(event.media)]
 }
 
-export const eventIsOnDate = (date: Date) => (event: HallingEvent) => {
+export const eventIsScheduledOnDate = (date: Date) => (event: HallingEvent) => {
   const isOnDate = isOnSameDate(date)
-  const result = R.findIndex(
-      item =>
-        (item.from < date && item.to > date) ||
-        isOnDate(item.from) ||
-        isOnDate(item.to),
-      getScheduledEvents(event)
+  return (
+    R.findIndex(
+      scheduledInstance =>
+        (scheduledInstance.from < date && scheduledInstance.to > date) ||
+        isOnDate(scheduledInstance.from) ||
+        isOnDate(scheduledInstance.to),
+      getScheduledInstancesForEvent(event)
     ) != -1
-    console.log("res: " + result)
-  return result
+  )
 }
 
 export type ScheduledInstance = {
@@ -64,7 +68,7 @@ export type ScheduledInstance = {
   to: Date
 }
 
-export const getScheduledEvents = ({
+export const getScheduledInstancesForEvent = ({
   schedule,
 }: HallingEvent): Array<ScheduledInstance> => {
   const isList = R.has("list")(schedule)
@@ -78,9 +82,13 @@ export const getScheduledEvents = ({
   }
 }
 
-export const getScheduledInstancesAfterDate = (date: Date, event: HallingEvent) => {
-    const instances = getScheduledEvents(event)
-    return R.filter(instance => instance.to > date, instances)
+export const getScheduledInstancesForEventOnAndAfterDate = (
+  date: Date,
+  event: HallingEvent
+) => {
+  const startOfDate = getStartAndEndOfDate(date).startOfDay
+  const instances = getScheduledInstancesForEvent(event)
+  return R.filter(instance => instance.to.getTime() > startOfDate, instances)
 }
 
 const getScheduleInstance = (item: any) => {
@@ -96,4 +104,23 @@ const getScheduleInstance = (item: any) => {
     from: new Date(`${from.date}T${from.time}`),
     to: new Date(`${to.date}T${to.time}`),
   }
+}
+
+export const createEventCooperator = (currentDate: Date) => (
+  a: HallingEvent,
+  b: HallingEvent
+) => {
+  const aNextEvent = getScheduledInstancesForEventOnAndAfterDate(currentDate, a)
+  const bNextEvent = getScheduledInstancesForEventOnAndAfterDate(currentDate, b)
+
+  if (aNextEvent.length === 0) return -1
+  if (bNextEvent.length === 0) return 1
+  if (aNextEvent[0].from > bNextEvent[0].from) return 1
+  if (aNextEvent[0].from < bNextEvent[0].from) return -1
+  return 0
+}
+
+export const eventIsOnOrAfterDate = (date: Date) => (event: HallingEvent) => {
+  const startOfDate = getStartAndEndOfDate(date).startOfDay
+  return event.lastEndTimestamp > startOfDate
 }
