@@ -19,7 +19,7 @@ const HomeScreen: SFC<Props> = ({
   fetchEvents,
   navigateToEvent,
 }) => (
-  <Container>
+  <Container style={{backgroundColor: "#fff"}}>
     <EventList
       events={events}
       navigateToEvent={navigateToEvent}

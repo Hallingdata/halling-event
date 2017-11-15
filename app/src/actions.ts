@@ -28,7 +28,7 @@ export const fetchEvents = () => dispatch => {
 }
 
 const filterFinishedEvents = R.reduce((acc, { _data }) => {
-  if (_data.lastEndTimestamp > new Date().getTime()) {
+  //if (_data.lastEndTimestamp > new Date().getTime()) {
     return R.append(_data, acc)
-  }
+ // }
 }, [])

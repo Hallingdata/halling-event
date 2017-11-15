@@ -16,6 +16,12 @@ export type HallingEvent = {
     country: { name: string; code: string }
   }
   schedule: any
+  details: {
+    "Beskrivelse"?: string
+    "Kontaktinfo"?: string
+    "Pris"?: string,
+    "Tid og sted"?: string
+  }
   media: {
     list?: any
   }

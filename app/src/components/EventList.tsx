@@ -7,6 +7,11 @@ import { HallingEvent } from "../../../types"
 import { __ } from "ramda"
 import { StyleSheet } from "react-native"
 import { NavigationScreenProp } from "react-navigation"
+import {
+  eventIsOnDate,
+  getScheduledInstancesAfterDate,
+} from "../util/hallingEvent"
+import { addDaysToDate } from "../util/date"
 
 type Props = {
   events: Array<HallingEvent>
@@ -15,7 +20,12 @@ type Props = {
   navigateToEvent: (event: HallingEvent) => void
 }
 
-const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent }) => {
+const EventList: SFC<Props> = ({
+  events,
+  refresh,
+  isRefreshing,
+  navigateToEvent,
+}) => {
   const eventIsToDay = eventIsOnDate(new Date())
   const eventIsToMorrow = eventIsOnDate(addDaysToDate(new Date(), 1))
 
@@ -23,14 +33,28 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent 
   let hasToMorrowHeader = false
   let hasLaterHeader = false
 
+  events.forEach(({id}) => console.log("id: " + id))
+
+  const compareEvents = (a: HallingEvent, b: HallingEvent) => {
+    const dateNow = new Date()
+    const aNextEvent = getScheduledInstancesAfterDate(dateNow, a)
+    const bNextEvent = getScheduledInstancesAfterDate(dateNow, b)
+
+    if (aNextEvent.length === 0) return -1
+    if (bNextEvent.length === 0) return 1
+    if (aNextEvent[0].from > bNextEvent[0].from) return 1
+    if (aNextEvent[0].from < bNextEvent[0].from) return -1
+    return 0
+  }
+
   return (
     <List
-      dataArray={events}
+      dataArray={R.sort(compareEvents, events)}
       renderRow={(event: HallingEvent) => {
         const items = []
         let eventIncluded = false
-        const markEventAsIncluded = () => (eventIncluded = true)
-
+        const markEventAsIncluded = () => eventIncluded = true
+        console.log(event.id)
         if (!hasToDayHeader) {
           hasToDayHeader = true
           items.push(
@@ -39,7 +63,13 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent 
                 <Text>I DAG</Text>
               </ListItem>
               {eventIsToDay(event) ? (
-                (markEventAsIncluded(), <EventListRow event={event} navigateToEvent={navigateToEvent} />)
+                (markEventAsIncluded(),
+                (
+                  <EventListRow
+                    event={event}
+                    navigateToEvent={navigateToEvent}
+                  />
+                ))
               ) : (
                 <ListItem>
                   <Text note>Det er ingen planlagte arrangement i dag</Text>
@@ -57,7 +87,13 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent 
                 <Text>I MORGEN</Text>
               </ListItem>
               {eventIsToMorrow(event) ? (
-                (markEventAsIncluded(), <EventListRow event={event} navigateToEvent={navigateToEvent} />)
+                (markEventAsIncluded(),
+                (
+                  <EventListRow
+                    event={event}
+                    navigateToEvent={navigateToEvent}
+                  />
+                ))
               ) : (
                 <ListItem>
                   <Text>Det er ingen planlagte arrangement i morgen</Text>
@@ -68,10 +104,10 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent 
         }
 
         if (
+          !eventIncluded &&
           !hasLaterHeader &&
           hasToDayHeader &&
-          hasToMorrowHeader &&
-          eventIsToMorrow(event)
+          hasToMorrowHeader
         ) {
           hasLaterHeader = true
           markEventAsIncluded()
@@ -87,7 +123,11 @@ const EventList: SFC<Props> = ({ events, refresh, isRefreshing, navigateToEvent 
 
         if (!eventIncluded) {
           items.push(
-            <EventListRow key={`${event.id}-bearEvent`} event={event} navigateToEvent={navigateToEvent}/>
+            <EventListRow
+              key={`${event.id}-bearEvent`}
+              event={event}
+              navigateToEvent={navigateToEvent}
+            />
           )
         }
 
@@ -108,28 +148,3 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
 })
-
-function getStartAndEndOfDay(date: Date) {
-  date.setHours(0, 0, 0)
-  const startOfDay = date.getTime()
-  date.setHours(23, 59, 59, 59)
-  const endOfDay = date.getTime()
-  return {
-    startOfDay,
-    endOfDay,
-  }
-}
-
-const eventIsOnDate = (date: Date) => (event: HallingEvent) => {
-  const { startOfDay, endOfDay } = getStartAndEndOfDay(date)
-
-  return (
-    event.firstStartTimestamp < endOfDay && event.lastEndTimestamp > startOfDay
-  )
-}
-
-const addDaysToDate = (dateIn: Date, days: number): Date => {
-  const date = new Date(dateIn.getTime())
-  date.setDate(date.getDate() + days)
-  return date
-}

@@ -2,6 +2,7 @@ import { Container, H2, Text } from "native-base"
 import React, { SFC } from "react"
 import { View, Image } from "react-native"
 import * as R from "ramda"
+import { getLargeImageUrls } from "../util/hallingEvent";
 
 import { HallingEvent } from "../../../types"
 
@@ -17,23 +18,13 @@ const EventScreen: SFC<Props> = ({ event }) => (
         height: 290,
         width: null,
       }}
-      source={{ uri: getLargeImages(event)[0] }}
+      source={{ uri: getLargeImageUrls(event)[0] }}
     />
     <H2>{event.name}</H2>
-    <Text>{event.address.municipality.name}</Text>
+    <Text>{event.details.Beskrivelse}</Text>
   </Container>
 )
 
 export default EventScreen
 
-const getLargeImages = (event: HallingEvent): Array<string> => {
-  const getUrlsFromEventMediaList = mediaList =>
-    R.map((key: string) => getUrlFromMedia(event.media.list[key]))(
-      R.keys(mediaList)
-    )
-  const getUrlFromMedia: (any) => string = media => media.large.url
 
-  return R.has("list")(event.media)
-    ? getUrlsFromEventMediaList(event.media.list)
-    : [getUrlFromMedia(event.media)]
-}

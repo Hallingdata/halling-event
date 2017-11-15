@@ -23,11 +23,6 @@ const Content: any = StackNavigator({
     screen: HomeContainer,
     navigationOptions: ({ navigation }) => ({
       title: `Arrangementer`,
-      headerRight: (
-        <Badge primary>
-          <Text>2</Text>
-        </Badge>
-      ),
     }),
   },
   Event: { screen: EventContainer },
@@ -40,7 +35,7 @@ export const App: SFC<any> = props => (
       onBeforeLift={onBeforeLift}
       persistor={persistor}
     >
-      <PushController />
+      <OnInit />
       <Content />
     </PersistGate>
   </Provider>
