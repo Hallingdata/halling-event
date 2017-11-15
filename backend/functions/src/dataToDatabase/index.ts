@@ -3,6 +3,7 @@ import fetch from "node-fetch"
 import * as R from "ramda"
 
 import { dataToDatabase, Inject } from "./dataToDatabase"
+import scrapEvents from "../scrapEvent";
 
 const db = fireAdmin.firestore()
 const getLastModificationTimeFromDb = db
@@ -23,6 +24,7 @@ const inject: Inject = {
     res => res.docs[0].data(),
     () => getLastModificationTimeFromDb
   ),
+  getEventDetails: scrapEvents,
   writeToDatabase: (data: Array<any>) =>
     R.reduce(
       (batch, data) =>

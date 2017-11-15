@@ -14,8 +14,10 @@
     "@types/jest": "^21.1.5",
     "@types/node-fetch": "^1.6.7",
     "@types/ramda": "github:types/npm-ramda#dist",
+    "cheerio": "^1.0.0-rc.2",
     "firebase-admin": "^5.4.3",
     "firebase-functions": "^0.7.1",
+    "html-to-text": "2.1.0",
     "jest": "^21.2.1",
     "node-fetch": "^1.7.3",
     "ramda": "^0.25.0",
@@ -35,5 +37,8 @@
       "jsx",
       "json"
     ]
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.5"
   }
 }

@@ -2,17 +2,20 @@ import * as R from "ramda"
 
 export type Inject = {
   getData: () => PromiseLike<any>
+  getEventDetails: (id: string) => PromiseLike<any>
   getDateOfLastEntryInDb: () => PromiseLike<Date>
   writeToDatabase: (data: Array<any>) => PromiseLike<any>
 }
 
 export const dataToDatabase = async ({
   getData,
+  getEventDetails,
   getDateOfLastEntryInDb,
   writeToDatabase,
 }: Inject) =>
   R.composeP(
     writeToDatabase,
+    collectDetails(getEventDetails),
     collectTimestamp,
     extractEventsEditedOrAddedAfter(await getDateOfLastEntryInDb()),
     getData
@@ -60,3 +63,16 @@ const getLastEndFromSchedule = (schedule: any) => {
 
   return new Date(`${date}T${time}`)
 }
+
+const collectDetails = (getDetails: (id: string) => PromiseLike<any>) => (
+  data: Array<any>
+) =>
+  Promise.all(
+    R.map(
+      async item => ({
+        ...item,
+        details: await getDetails(item.id),
+      }),
+      data
+    )
+  )
