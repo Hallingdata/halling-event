@@ -3,7 +3,7 @@ import fetch from "node-fetch"
 import * as R from "ramda"
 
 import { dataToDatabase, Inject } from "./dataToDatabase"
-import scrapEvents from "../scrapEvent";
+import scrapEvents from "../scrapEvent"
 
 const db = fireAdmin.firestore()
 const getLastModificationTimeFromDb = db
@@ -21,14 +21,14 @@ const inject: Inject = {
   getDateOfLastEntryInDb: R.composeP(
     (time: number) => new Date(time),
     R.prop("modifiedTimestamp"),
-    res => res.docs[0].data(),
+    res =>
+      res.docs.length <= 0 ? { modifiedTimestamp: 0 } : res.docs[0].data(),
     () => getLastModificationTimeFromDb
   ),
   getEventDetails: scrapEvents,
   writeToDatabase: (data: Array<any>) =>
     R.reduce(
-      (batch, data) =>
-        batch.set(db.collection("events").doc(data.id), data),
+      (batch, data) => batch.set(db.collection("events").doc(data.id), data),
       db.batch(),
       data
     ).commit(),
