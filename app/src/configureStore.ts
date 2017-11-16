@@ -1,5 +1,4 @@
 import { applyMiddleware, compose, createStore } from "redux"
-import { createLogger } from "redux-logger"
 import { persistCombineReducers, persistStore } from "redux-persist"
 import storage from "redux-persist/es/storage"
 import thunkMiddleware from "redux-thunk"
@@ -11,12 +10,13 @@ const config = {
   storage,
 }
 const reducer = persistCombineReducers(config, { events })
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export default function configureStore() {
   const store = createStore(
     reducer,
-    composeEnhancers(applyMiddleware(thunkMiddleware)),
+    composeEnhancers(applyMiddleware(thunkMiddleware))
   )
   const persistor = persistStore(store)
 
