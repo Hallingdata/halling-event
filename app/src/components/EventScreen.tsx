@@ -14,23 +14,30 @@ const EventScreen: SFC<Props> = ({ event }) => (
   <Container>
     <Content>
       <Card>
-          <Image
-            resizeMode="cover"
-            style={{
-              height: 290,
-              width: null,
-            }}
-            source={{ uri: getLargeImageUrls(event)[0] }}
-          />
+        <Image
+          resizeMode="cover"
+          style={{
+            height: 290,
+            width: null,
+          }}
+          source={{ uri: getLargeImageUrls(event)[0] }}
+        />
         <CardItem>
           <H2>{event.name}</H2>
         </CardItem>
-        <CardItem cardBody>
+        <CardItem>
           <Text>{event.details.Beskrivelse}</Text>
         </CardItem>
-        <CardItem >
+        <CardItem>
           <Text>{event.details["Tid og sted"]}</Text>
         </CardItem>
+        {R.has("Pris")(event.details) ? (
+          <CardItem>
+            <Text>{event.details.Pris}</Text>
+          </CardItem>
+        ) : (
+          <View></View>
+        )}
       </Card>
     </Content>
   </Container>
