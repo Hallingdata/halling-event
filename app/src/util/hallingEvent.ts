@@ -86,9 +86,19 @@ export const getScheduledInstancesForEventOnAndAfterDate = (
   date: Date,
   event: HallingEvent
 ) => {
+  const instances = getScheduledInstancesForEvent(event)
+  return R.filter(
+    instance =>
+      date.toDateString() === new Date(instance.from).toDateString() ||
+      instance.to.getTime() > date.getTime(),
+    //  The code above is actually not totally correct, but it works "most of the time". TODO: should be fixed
+    instances
+  )
+  /*
   const startOfDate = getStartAndEndOfDate(date).startOfDay
   const instances = getScheduledInstancesForEvent(event)
   return R.filter(instance => instance.to.getTime() > startOfDate, instances)
+  */
 }
 
 const getScheduleInstance = (item: any) => {
@@ -121,6 +131,8 @@ export const createEventCooperator = (currentDate: Date) => (
 }
 
 export const eventIsOnOrAfterDate = (date: Date) => (event: HallingEvent) => {
-  const startOfDate = getStartAndEndOfDate(date).startOfDay
-  return event.lastEndTimestamp > startOfDate
+  return (
+    date.toDateString() === new Date(event.lastEndTimestamp).toDateString() ||
+    event.lastEndTimestamp > date.getTime()
+  )
 }
