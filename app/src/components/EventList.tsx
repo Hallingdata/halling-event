@@ -102,7 +102,8 @@ const EventList: SFC<Props> = ({
           !eventIncluded &&
           !hasLaterHeader &&
           hasToDayHeader &&
-          hasToMorrowHeader
+          hasToMorrowHeader &&
+          !eventIsToMorrow(event)
         ) {
           hasLaterHeader = true
           markEventAsIncluded()
