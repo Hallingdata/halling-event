@@ -1,7 +1,8 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import { getAllEvents } from "../util/firebase";
 
-import { fetchEvents } from "../actions"
+import { fetchEvents } from "../actions/events"
 
 type Props = {
   fetchEvents: () => void
@@ -20,7 +21,7 @@ class OnInit extends Component<Props> {
 
 const mapDispatchToProps = dispatch => ({
   fetchEvents() {
-    dispatch(fetchEvents())
+    dispatch(fetchEvents(getAllEvents))
   },
 })
 

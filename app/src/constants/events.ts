@@ -1,0 +1,2 @@
+export const REPLACE_EVENTS = "REPLACE_EVENTS"
+export const IS_FETCHING = "IS_FETCHING"

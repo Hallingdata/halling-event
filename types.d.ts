@@ -1,28 +1,26 @@
 export type HallingEvent = {
-  id: string
-  modifiedTimestamp: number
-  firstStartTimestamp: number
-  lastEndTimestamp: number
-  lang: string
-  location: boolean
-  name: string
-  created: string
-  modified: string
+  id: string;
+  modifiedTimestamp: number;
+  firstStartTimestamp: number;
+  lastEndTimestamp: number;
+  lang: string;
+  location: boolean;
+  name: string;
+  created: string;
+  modified: string;
   address: {
-    postal_area: { name: string; code: string }
-    municipality: { name: string; code: string }
-    county: { name: string; code: string }
-    street: string
-    country: { name: string; code: string }
-  }
-  schedule: any
+    postal_area: { name: string; code: string };
+    municipality: { name: string; code: string };
+    county: { name: string; code: string };
+    street: string;
+    country: { name: string; code: string };
+  };
+  schedule: any;
   details: {
-    "Beskrivelse"?: string
-    "Kontaktinfo"?: string
-    "Pris"?: string,
-    "Tid og sted"?: string
-  }
-  media: {
-    list?: any
-  }
-}
+    Beskrivelse?: string;
+    Kontaktinfo?: string;
+    Pris?: string;
+    "Tid og sted"?: string;
+  };
+  media: any;
+};

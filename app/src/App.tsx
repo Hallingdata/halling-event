@@ -1,7 +1,7 @@
 import EventContainer from "./containers/EventContainer"
 import EventScreen from "./components/EventScreen"
 import PushController from "./containers/PushController"
-import { Text, Badge } from "native-base"
+import { Text, Badge, Button, Icon, Root, ActionSheet } from "native-base"
 import React, { SFC } from "react"
 import { DrawerNavigator, StackNavigator } from "react-navigation"
 import { Provider } from "react-redux"
@@ -23,6 +23,16 @@ const Content: any = StackNavigator({
     screen: HomeContainer,
     navigationOptions: ({ navigation }) => ({
       title: `Arrangementer`,
+      /* headerRight: (
+        <Button
+          transparent
+          onPress={
+
+          }
+        >
+          <Icon name="options" />
+        </Button>
+      ),*/
     }),
   },
   Event: { screen: EventContainer },
@@ -36,7 +46,9 @@ export const App: SFC<any> = props => (
       persistor={persistor}
     >
       <OnInit />
-      <Content />
+      <Root>
+        <Content />
+      </Root>
     </PersistGate>
   </Provider>
 )

@@ -2,7 +2,6 @@ import { Container } from "native-base"
 import React, { SFC } from "react"
 
 import { HallingEvent } from "../../../types"
-import { fetchEvents } from "../actions"
 import EventList from "./EventList"
 import { NavigationScreenProp } from "react-navigation"
 

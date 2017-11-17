@@ -1,9 +1,12 @@
+import { getAllEvents } from '../util/firebase';
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import * as R from 'ramda';
 
-import { fetchEvents } from "../actions"
+import { fetchEvents } from "../actions/events"
 import HomeScreen from "../components/HomeScreen"
-import { HallingEvent } from '../../../types';
+import { HallingEvent } from "../../../types"
+
 
 const mapStateToProps = state => ({
   events: state.events.items,
@@ -12,16 +15,17 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchEvents() {
-    dispatch(fetchEvents())
+    dispatch(fetchEvents(getAllEvents))
   },
 })
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,
   ...dispatchProps,
-  navigateToEvent: (event: HallingEvent) => ownProps.navigation.navigate('Event', {event})
+  navigateToEvent: (event: HallingEvent) =>
+    ownProps.navigation.navigate("Event", { event }),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps,mergeProps)(HomeScreen)
-
-
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
+  HomeScreen
+)

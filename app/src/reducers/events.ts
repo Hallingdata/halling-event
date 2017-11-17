@@ -1,8 +1,7 @@
-import { IS_FETCHING, RECEIVE_EVENTS } from "../actions"
-
 import { HallingEvent } from "../../../types"
+import { IS_FETCHING, REPLACE_EVENTS } from '../constants/events';
 
-type State = {
+export type State = {
   isFetching: boolean
   items: Array<HallingEvent>
 }
@@ -14,7 +13,7 @@ const initState: State = {
 
 export function events(state = initState, action): State {
   switch (action.type) {
-    case RECEIVE_EVENTS:
+    case REPLACE_EVENTS:
       return {
         ...state,
         items: action.events,
