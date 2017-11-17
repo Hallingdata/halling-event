@@ -10,6 +10,7 @@
     "@types/react-navigation": "^1.0.22",
     "babel-jest": "^21.2.0",
     "babel-preset-react-native-stage-0": "^1.0.1",
+    "deep-freeze": "^0.0.1",
     "jest": "^21.2.1",
     "react-native-typescript-transformer": "^1.1.4",
     "react-test-renderer": "^16.0.0",
@@ -29,7 +30,13 @@
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   },
   "dependencies": {
     "fbjs": "^0.8.16",
